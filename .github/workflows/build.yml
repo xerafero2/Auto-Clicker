@@ -35,8 +35,8 @@ jobs:
           echo "android.useAndroidX=true" > gradle.properties
           echo "android.suppressUnsupportedCompileSdk=34" >> gradle.properties
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
+      - name: Build debug APK (with stacktrace)
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
