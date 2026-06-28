@@ -26,7 +26,6 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Buat UI secara programmatic
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(40, 40, 40, 40)
@@ -77,7 +76,6 @@ class MainActivity : Activity() {
     }
 
     private fun startAutoClicker() {
-        // Periksa apakah layanan aksesibilitas sudah diaktifkan
         val enabledServices = Settings.Secure.getString(
             contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
         )
@@ -104,7 +102,6 @@ class MainActivity : Activity() {
         Toast.makeText(this, "AutoClicker dimulai", Toast.LENGTH_SHORT).show()
     }
 
-    // Accessibility Service sebagai nested class
     class AutoClickerService : AccessibilityService() {
         private val handler = Handler(Looper.getMainLooper())
         private var running = false
@@ -114,6 +111,18 @@ class MainActivity : Activity() {
         private var x = 0f
         private var y = 0f
         private var cycleDone = 0
+
+        override fun onCreate() {
+            super.onCreate()
+            // Konfigurasi service info dilakukan di sini
+            serviceInfo = AccessibilityServiceInfo().apply {
+                eventTypes = AccessibilityEvent.TYPES_ALL_MASK
+                feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
+                flags = AccessibilityServiceInfo.DEFAULT
+                canPerformGestures = true
+                notificationTimeout = 100
+            }
+        }
 
         override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
             intent?.let {
@@ -155,18 +164,6 @@ class MainActivity : Activity() {
                 override fun onCompleted(desc: GestureDescription?) { performMultiClick(clickIdx + 1) }
                 override fun onCancelled(desc: GestureDescription?) { performMultiClick(clickIdx + 1) }
             }, null)
-        }
-
-        override fun onServiceConnected() {
-            super.onServiceConnected()
-            // Konfigurasi service info tanpa file XML
-            serviceInfo = AccessibilityServiceInfo().apply {
-                eventTypes = AccessibilityEvent.TYPES_ALL_MASK
-                feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
-                flags = AccessibilityServiceInfo.DEFAULT
-                canPerformGestures = true
-                notificationTimeout = 100
-            }
         }
 
         override fun onDestroy() {
