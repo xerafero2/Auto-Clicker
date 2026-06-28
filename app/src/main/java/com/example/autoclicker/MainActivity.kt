@@ -112,9 +112,8 @@ class MainActivity : Activity() {
         private var y = 0f
         private var cycleDone = 0
 
-        override fun onCreate() {
-            super.onCreate()
-            // Konfigurasi service info dilakukan di sini
+        override fun onServiceConnected() {
+            super.onServiceConnected()
             serviceInfo = AccessibilityServiceInfo().apply {
                 eventTypes = AccessibilityEvent.TYPES_ALL_MASK
                 feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
