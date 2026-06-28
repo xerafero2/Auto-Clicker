@@ -21,13 +21,17 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Setup Gradle 8.1.0
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.1.0
+      - name: Download & Install Gradle 8.10.2
+        run: |
+          wget -q https://services.gradle.org/distributions/gradle-8.10.2-bin.zip
+          unzip -q gradle-8.10.2-bin.zip
+          echo "$(pwd)/gradle-8.10.2/bin" >> $GITHUB_PATH
+
+      - name: Generate Gradle Wrapper (sementara)
+        run: gradle wrapper --gradle-version 8.10.2
 
       - name: Build debug APK
-        run: gradle assembleDebug
+        run: ./gradlew assembleDebug
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
