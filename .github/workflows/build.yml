@@ -27,8 +27,13 @@ jobs:
           unzip -q gradle-8.10.2-bin.zip
           echo "$(pwd)/gradle-8.10.2/bin" >> $GITHUB_PATH
 
-      - name: Generate Gradle Wrapper (sementara)
+      - name: Generate Gradle Wrapper
         run: gradle wrapper --gradle-version 8.10.2
+
+      - name: Create gradle.properties (enable AndroidX)
+        run: |
+          echo "android.useAndroidX=true" > gradle.properties
+          echo "android.suppressUnsupportedCompileSdk=34" >> gradle.properties
 
       - name: Build debug APK
         run: ./gradlew assembleDebug
